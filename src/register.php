@@ -1,46 +1,41 @@
 <?php
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+session_start();
+if (isset($_SESSION['email'])) {
+    header("Location: index.php");
+    exit();
+}
 
 $db = new PDO('sqlite:database/database.db');
 
-// Form gönderildiyse
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $userRole = "user";
-
-    $fullName = $_POST['full_name'];
+    $fullName = trim($_POST['full_name']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
+    $userRole = 'user';
 
-    // Basit validation
-    if (empty($fullName) || empty($email) || empty($password)) {
-        echo "Ad soyad, e-posta ve şifre boş olamaz.";
+    if (!$fullName || !$email || !$password) {
+        echo "Boş alan bırakılamaz.";
         exit;
     }
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
-    // Kullanıcıyı ekle
-    $stmt = $db->prepare("INSERT INTO User (full_name, email, role , password) VALUES (:full_name, :email, :role, :password)");
 
+    $stmt = $db->prepare("INSERT INTO User (full_name, email, role, password) VALUES (:full_name, :email, :role, :password)");
     try {
         $stmt->execute([
             ':full_name'=> $fullName,
-            ':email' => $email,
+            ':email'=> $email,
             ':role'=> $userRole,
-            ':password' => $hashed_password
+            ':password'=> $hashed_password
         ]);
         echo "Kayıt başarılı!";
     } catch (PDOException $e) {
-        if ($e->getCode() == 23000) { // UNIQUE constraint hatası
-            echo "Bu e-posta ile zaten eşleşen kayıt var.";
-        } else {
-            echo "Hata: " . $e->getMessage();
-        }
+        if ($e->getCode() == 23000) echo "Bu e-posta zaten kayıtlı.";
+        else echo "Hata: ".$e->getMessage();
     }
 }
+
+include 'includes/header.php';
 ?>
 
 <form method="post">
@@ -49,3 +44,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Şifre: <input type="password" name="password" required><br>
     <button type="submit">Kayıt Ol</button>
 </form>
+
+<?php include 'includes/footer.php'; ?>

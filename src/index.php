@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Örnek</title>
-    </head>
-    <body>
-
-        <?php
-            echo "Merhaba, ben bir PHP betiğiyim!";
-        ?>
-
-    </body>
-</html>
+<?php include('includes/header.php') ?>
+<?php echo "Merhaba, ben bir PHP betiğiyim!"; ?>
+<?php include('includes/footer.php') ?>
