@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   web:
-    image:  bilet-app 
+    build: .
+    image:  bilet-app:latest
     ports:
       - "8080:80"
     volumes:

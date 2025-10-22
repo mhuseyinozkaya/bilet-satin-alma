@@ -1,8 +1,5 @@
 ## Kurulum
 
 ```bash
-docker build -t bilet-app .
-```
-```bash
-docker compose up -d
+docker compose up -d --build
 ```
