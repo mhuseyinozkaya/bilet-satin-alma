@@ -6,7 +6,7 @@ $kalkis_noktalari = [];
 $varis_noktalari = [];
 
 try {
-    $pdo = new PDO("sqlite:database/database.db");
+    $pdo = new PDO("sqlite:/var/www/database.db");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Combo List için lokasyonları çek

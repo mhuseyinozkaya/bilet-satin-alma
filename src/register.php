@@ -5,7 +5,7 @@ if (isset($_SESSION['email'])) {
     exit();
 }
 
-$db = new PDO('sqlite:database/database.db');
+$db = new PDO('sqlite:/var/www/database.db');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fullName = trim($_POST['full_name']);

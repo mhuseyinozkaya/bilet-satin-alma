@@ -5,7 +5,7 @@ if (isset($_SESSION['email'])) {
     exit();
 }
 
-$db = new PDO('sqlite:database/database.db');
+$db = new PDO('sqlite:/var/www/database.db');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
@@ -20,12 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([':email'=>$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    //  Kullanıcı kaydı eşleşiyorsa SESSION ataması yap
     if ($user && password_verify($password, $user['password'])) {
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['email'] = $user['email'];
         $_SESSION['name'] = $user['full_name'];
-        if($user['role'] === 'admin'){
+        $_SESSION['role'] = $user['role'];
+        if($_SESSION['role'] === 'admin'){
             header("Location: admin/admin.php");   
         }else{
             header("Location: index.php");
