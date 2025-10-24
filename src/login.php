@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt = $db->prepare("SELECT id, full_name, email, role, password FROM User WHERE email=:email LIMIT 1");
-    $stmt->execute([':email'=>$email]);
+    $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     //  Kullanıcı kaydı eşleşiyorsa SESSION ataması yap
@@ -27,9 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['email'] = $user['email'];
         $_SESSION['name'] = $user['full_name'];
         $_SESSION['role'] = $user['role'];
-        if($_SESSION['role'] === 'admin'){
-            header("Location: admin/admin.php");   
-        }else{
+        if ($_SESSION['role'] === 'admin') {
+            header("Location: admin/admin.php");
+        } else {
             header("Location: index.php");
         }
         exit();

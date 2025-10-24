@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!empty($_POST['trip_id']) && !empty($_POST['selected_seat'])) {
-    if (isset($_SESSION["id"]) && $_SESSION['role'] === 'user') {
+    if (isset($_SESSION["user_id"]) && $_SESSION['role'] === 'user') {
 
         $trip_id = $_POST['trip_id'];
         $selected_seat = $_POST['selected_seat'];
@@ -14,7 +14,7 @@ if (!empty($_POST['trip_id']) && !empty($_POST['selected_seat'])) {
             $get_trip_price = 'SELECT price FROM Trips WHERE id = :trip_id';
 
             $stmt = $pdo->prepare($get_balance);
-            $stmt->execute(['user_id' => $_SESSION['id']]);
+            $stmt->execute(['user_id' => $_SESSION['user_id']]);
 
             $balance = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -47,7 +47,7 @@ if (!empty($_POST['trip_id']) && !empty($_POST['selected_seat'])) {
                 $stmt = $pdo->prepare($save_ticket);
                 $stmt->execute([
                     'trip_id' => $trip_id,
-                    'user_id' => $_SESSION['id'],
+                    'user_id' => $_SESSION['user_id'],
                     'total_price' => $priceValue
                 ]);
 
@@ -63,13 +63,13 @@ if (!empty($_POST['trip_id']) && !empty($_POST['selected_seat'])) {
                 $stmt = $pdo->prepare($update_user_balance);
                 $stmt->execute([
                     'new_balance' => $new_balance,
-                    'user_id' => $_SESSION['id']
+                    'user_id' => $_SESSION['user_id']
                 ]);
 
             }
 
         } catch (PDOException $e) {
-            //Hata mesajı gösterme
+            echo $e->getMessage();
         }
 
     } else { ?>
